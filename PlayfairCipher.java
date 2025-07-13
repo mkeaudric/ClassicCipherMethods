@@ -221,17 +221,18 @@ public class PlayfairCipher {
         System.out.println("2. Decode");
         int action;
 
-        while(true){
+        while (true) {
+            String actionString = sc.nextLine(); // pake string jadinya biar ga error
+
             try {
-                action = sc.nextInt();
-            } catch (Exception e){
+                action = Integer.parseInt(actionString);
+                if (action == 1 || action == 2) {
+                    break; 
+                } else {
+                    System.out.println("Aksi yang bisa dipilih hanya 1 atau 2");
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Hanya bisa masukan angka");
-                continue;
-            }
-            if(action != 1 && action != 2){
-                System.out.println("Aksi yang bisa dipilih hanya 1 atau 2");
-            } else{
-                break;
             }
         }
         
