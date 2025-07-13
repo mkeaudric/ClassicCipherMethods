@@ -1,8 +1,12 @@
 package CipherClassic;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class PlayfairCipher {
+    static Queue<Integer> spaceIdx = new LinkedList<>();
+
     public static String deleteDuplicatesAndJ(String str){
         // tambahan, delete J kalau ada (pakenya I)
         // juga jadiin uppercase
@@ -94,27 +98,85 @@ public class PlayfairCipher {
             }
         }
 
+        for(Integer idx : spaceIdx){
+            sb.insert(idx, " ");
+        }
+
         return sb.toString();
     }
 
-    // public static String decodeInput (String input, String key){
-    //     key = deleteDuplicatesAndJ(key);
+    // decode sama persis, yang beda cuma kasus geser kiri dan geser atas
+    public static String decodeInput (String input, String key){
+        int i, j, k, inputLen = input.length();
+
+        StringBuilder sb = new StringBuilder();
         
-    //     char[][] playfairMatrix = constructPlayfairMatrix(key);
+        char[][] playfairMatrix = constructPlayfairMatrix(key);
 
-    //     for(int i = 0; i < input.length(); i += 2){
+        for(i = 0; i < inputLen; i += 2){
+            char c1 = input.charAt(i);
+            char c2 = input.charAt(i+1);
 
-    //     }
+            int c1_j, c1_k, c2_j, c2_k;
+            c1_j = c1_k = c2_j = c2_k = 0;
 
-    //     return " ";
-    // }
+            for(j = 0; j < 5; j++){
+                for(k = 0; k < 5; k++){
+                    if(playfairMatrix[j][k] == c1) {
+                        c1_j = j;
+                        c1_k = k;
+                    }
+                    if(playfairMatrix[j][k] == c2) {
+                        c2_j = j;
+                        c2_k = k;
+                    }
+                }
+            }
 
-    // - kapitalisasi huruf, 
+            if(c1_j == c2_j){ // geser ke kiri (modulo di java tetep negatif, jadi abis -1, + dividennya)
+                sb.append(playfairMatrix[c1_j][(c1_k - 1 + 5)%5]);
+                sb.append(playfairMatrix[c2_j][(c2_k - 1 + 5)%5]);
+            } else if (c1_k == c2_k){ // geser ke atas
+                sb.append(playfairMatrix[(c1_j - 1 + 5)%5][c1_k]);
+                sb.append(playfairMatrix[(c2_j - 1 + 5)%5][c2_k]);
+            } else{ // swap horizontal
+                // kasus c1_j != c2_j && c1_k != c2_k
+                // gaada kasus c1_j == c2_j && c1_k == c2_k, karena dobel udah diilangin pas inisialisasi
+                sb.append(playfairMatrix[c1_j][c2_k]);
+                sb.append(playfairMatrix[c2_j][c1_k]);
+            }
+        }
+
+        for(Integer idx : spaceIdx){
+            sb.insert(idx, " ");
+        }
+
+        return sb.toString();
+    }
+
+    // hitung panjang string tanpa spasi, 
+    // simpen indeks kemunculan spasi,
+    // return string input tanpa spasi,
+    // juga trim dan toUpperCase
+    public static String stringWithoutSpace(Queue<Integer> spaceIdx, String str){
+        str = str.trim().toUpperCase();
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < str.length(); i++){
+            if(str.charAt(i) == ' ') {
+                spaceIdx.add(i);
+                continue;
+            } else{
+                sb.append(str.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+
     // - ubah J -> I, 
     // - ubah huruf doble (misal BB -> BX), 
     // - dan tambahkan X (atau Z) jika length input ganjil
     public static String initInput(String input){
-        StringBuilder sb = new StringBuilder(input.toUpperCase().trim());
+        StringBuilder sb = new StringBuilder(stringWithoutSpace(spaceIdx, input));
         int inputLen = sb.length();
 
         if(inputLen%2 == 1) {
@@ -155,7 +217,29 @@ public class PlayfairCipher {
         String key = sc.nextLine();
         key = deleteDuplicatesAndJ(key);
 
-        System.out.println(encodeInput(input, key));
+        System.out.println("1. Encode");
+        System.out.println("2. Decode");
+        int action;
+
+        while(true){
+            try {
+                action = sc.nextInt();
+            } catch (Exception e){
+                System.out.println("Hanya bisa masukan angka");
+                continue;
+            }
+            if(action != 1 && action != 2){
+                System.out.println("Aksi yang bisa dipilih hanya 1 atau 2");
+            } else{
+                break;
+            }
+        }
+        
+        if(action == 1){
+            System.out.println(encodeInput(input, key));
+        } else{
+            System.out.println(decodeInput(input, key));
+        }
 
         sc.close();
     }
