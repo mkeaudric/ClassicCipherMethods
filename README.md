@@ -8,7 +8,7 @@ Perkalian matriks, dll di hard code
 
 Saya tidak optimisasi sama sekali, jadi maklumin kalau lambat
 
-juga saya tidak buat handling untuk input selain huruf alfabet, input harus alfabet agar program berjalan dengan baik
+Saya juga tidak membuat handling untuk input selain huruf alfabet, input harus alfabet agar program berjalan dengan baik
 
 tidak ada copyright
 
