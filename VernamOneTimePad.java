@@ -64,6 +64,4 @@ public class VernamOneTimePad {
         System.out.println("Alphabet range ciphertext : " + keepInsideAlphabetRange(ciphertext));
         sc.close();
     }
-
-    // NOTE : ADA KASUS KELUARAN \n gatau kenapa
 }
