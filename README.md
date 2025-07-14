@@ -2,7 +2,7 @@ Saya lagi belajar "Classical Cipher Methods" dari youtube playlist ini https://w
 
 Saya coba pahami dan implementasikan dengan Java
 
-Library yg dipakai hanya library dasar spt Queue, LinkedList (utk Queue), dll
+Library yg dipakai hanya library dasar spt Queue, LinkedList (utk Queue), Scanner, dll
 
 Perkalian matriks, dll di hard code 
 
