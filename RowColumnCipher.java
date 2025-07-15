@@ -51,25 +51,35 @@ public class RowColumnCipher {
             }
         }
 
+        // print array
         for(i = 0; i < N; i++){
             for(j = 0; j < M; j++){
                 System.out.print(array[i][j] + " ");
             } System.out.println();
         }
 
+        return processCiphertext(array, key);
+    }
+
+    public static String processCiphertext(char[][] array, String key) {
+        int keyLen = key.length();
+        int rows = array.length;
+
+        int[] colForOrder = new int[keyLen];
+        for (int i = 0; i < keyLen; i++) {
+            int order = key.charAt(i) - '1';
+            colForOrder[order] = i;
+        }
+
         StringBuilder sb = new StringBuilder();
-        // gua yakin bagian ini bisa di optimisasi, mungkin di input,
-        // tapi utk sekarang masih pakai double loop utk ngambil sesuai urutan
-        int k, keyLen = key.length();
-        for(j = 0; j < keyLen; j++){
-            for(k = 0; k < keyLen; k++){
-                if(j == key.charAt(k) - '1'){ // -'1' karena key dari 1, sementara maunya dari 0
-                    for(i = 0; i < N; i++){
-                        sb.append(array[i][k]);
-                    } 
-                }
+        
+        for (int order = 0; order < keyLen; order++) {
+            int col = colForOrder[order];
+            for (int row = 0; row < rows; row++) {
+                sb.append(array[row][col]);
             }
         }
+
         return sb.toString();
     }
 
@@ -115,8 +125,7 @@ public class RowColumnCipher {
             else System.out.println("NxM harus lebih besar/sama dengan dari panjang plaintext!");
         }
 
-        // String key = generateKey(M);
-        String key = "4312567";
+        String key = generateKey(M);
         System.out.println("Generated key : " + key);
 
         sc.nextLine();
